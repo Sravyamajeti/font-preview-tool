@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="description" content="Upload your logo and preview 40+ fonts with custom text. A fast, free font-on-logo tool for designers, business owners, and branding enthusiasts.">
+<meta name="keywords" content="logo font preview, branding tool, custom font logo, font visualizer, brand name font tool">
+<meta property="og:title" content="Font Preview on Logo">
+<meta property="og:description" content="Upload your logo and preview 40+ fonts with your text.">
+<meta property="og:image" content="https://yourdomain.com/sample-preview.png">
+<meta property="og:url" content="https://yourdomain.com">
+<meta name="twitter:card" content="summary_large_image">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Font Preview on Logo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Anton&family=Bebas+Neue&family=Caveat&family=Comfortaa&family=Courier+Prime&family=Dancing+Script&family=EB+Garamond&family=Fira+Sans&family=Fredoka&family=Great+Vibes&family=Indie+Flower&family=Josefin+Sans&family=Kalam&family=Kanit&family=Lato&family=Lobster&family=Merriweather&family=Montserrat&family=Nanum+Gothic&family=Nunito&family=Oswald&family=Pacifico&family=Patrick+Hand&family=Poppins&family=Prompt&family=Quicksand&family=Raleway&family=Righteous&family=Roboto&family=Roboto+Slab&family=Rubik&family=Sacramento&family=Shadows+Into+Light&family=Signika&family=Source+Sans+Pro&family=Titillium+Web&family=Zilla+Slab&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #ffd6ec, #ffeefc);
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p.description {
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 1rem;
+      color: #555;
+    }
+
+    .container {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .controls input[type="text"],
+    .controls input[type="file"],
+    .controls input[type="color"],
+    .controls input[type="number"],
+    .controls select {
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      min-width: 120px;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .preview-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .preview-image-wrapper {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      background: #f0f0f0;
+    }
+
+    .preview-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .text-line {
+      position: absolute;
+      color: black;
+      font-weight: bold;
+      text-shadow: 0 0 4px white;
+      line-height: 1.2;
+      margin: 0;
+      padding: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      width: 100%;
+    }
+
+    .font-label {
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      background: #f8f8f8;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Font Preview on Logo</h1>
+    <p class="description">Upload your logo and preview it with different fonts and text styles — perfect for branding, personal projects, and social media graphics.</p>
+  </header>
+
+  <div class="container">
+    <div class="controls">
+      <input type="file" id="logoInput" accept="image/*" />
+      <input type="text" id="line1" placeholder="Line 1 text" />
+      <input type="number" id="line1Size" value="24" min="8" max="72" />
+      <input type="text" id="line2" placeholder="Line 2 text" />
+      <input type="number" id="line2Size" value="20" min="8" max="72" />
+      <input type="text" id="line3" placeholder="Line 3 text" />
+      <input type="number" id="line3Size" value="16" min="8" max="72" />
+      <input type="color" id="fontColor" value="#000000" />
+      <select id="textPosition">
+        <option value="top">Top</option>
+        <option value="center">Center</option>
+        <option value="bottom">Bottom</option>
+      </select>
+    </div>
+
+    <div class="preview-grid" id="previewGrid"></div>
+  </div>
+
+  <script>
+    const fonts = [
+      'Cinzel', 'Poppins', 'Lobster', 'Montserrat', 'Roboto', 'Playfair Display',
+      'Raleway', 'Oswald', 'Quicksand', 'Courier Prime', 'Caveat', 'Pacifico',
+      'Indie Flower', 'Nunito', 'Prompt', 'Kanit', 'EB Garamond',
+      'Shadows Into Light', 'Merriweather', 'Anton', 'Bebas Neue', 'Patrick Hand',
+      'Poiret One', 'Fira Sans', 'Signika', 'Comfortaa', 'Roboto Slab',
+      'Rubik', 'Source Sans Pro', 'Titillium Web', 'Zilla Slab',
+      'Kalam', 'Josefin Sans', 'Fredoka', 'Great Vibes', 'Sacramento',
+      'Dancing Script', 'Lato', 'Nanum Gothic', 'Righteous'
+    ];
+
+    const logoInput = document.getElementById('logoInput');
+    const previewGrid = document.getElementById('previewGrid');
+    const line1Input = document.getElementById('line1');
+    const line2Input = document.getElementById('line2');
+    const line3Input = document.getElementById('line3');
+    const line1Size = document.getElementById('line1Size');
+    const line2Size = document.getElementById('line2Size');
+    const line3Size = document.getElementById('line3Size');
+    const fontColor = document.getElementById('fontColor');
+    const textPosition = document.getElementById('textPosition');
+
+    let logoSrc = '';
+
+    function updatePreviews() {
+      previewGrid.innerHTML = '';
+
+      fonts.forEach(font => {
+        const card = document.createElement('div');
+        card.className = 'preview-card';
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'preview-image-wrapper';
+
+        const img = document.createElement('img');
+        img.className = 'preview-image';
+        img.src = logoSrc || 'https://via.placeholder.com/300x300.png?text=Your+Logo';
+
+        const line1 = document.createElement('div');
+        const line2 = document.createElement('div');
+        const line3 = document.createElement('div');
+
+        line1.className = 'text-line';
+        line2.className = 'text-line';
+        line3.className = 'text-line';
+
+        line1.innerText = line1Input.value;
+        line2.innerText = line2Input.value;
+        line3.innerText = line3Input.value;
+
+        line1.style.fontSize = `${line1Size.value}px`;
+        line2.style.fontSize = `${line2Size.value}px`;
+        line3.style.fontSize = `${line3Size.value}px`;
+
+        [line1, line2, line3].forEach(line => {
+          line.style.fontFamily = font;
+          line.style.color = fontColor.value;
+        });
+
+        const pos = textPosition.value;
+        if (pos === 'top') {
+          line1.style.top = '10px';
+          line2.style.top = '35px';
+          line3.style.top = '60px';
+        } else if (pos === 'center') {
+          line1.style.top = 'calc(50% - 40px)';
+          line2.style.top = 'calc(50% - 10px)';
+          line3.style.top = 'calc(50% + 20px)';
+        } else if (pos === 'bottom') {
+          line3.style.bottom = '10px';
+          line2.style.bottom = '35px';
+          line1.style.bottom = '60px';
+        }
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(line1);
+        wrapper.appendChild(line2);
+        wrapper.appendChild(line3);
+        card.appendChild(wrapper);
+
+        const label = document.createElement('div');
+        label.className = 'font-label';
+        label.innerText = font;
+        card.appendChild(label);
+
+        previewGrid.appendChild(card);
+      });
+    }
+
+    [line1Input, line2Input, line3Input, line1Size, line2Size, line3Size, fontColor, textPosition].forEach(input => {
+      input.addEventListener('input', updatePreviews);
+    });
+
+    logoInput.addEventListener('change', (e) => {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        logoSrc = event.target.result;
+        updatePreviews();
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    });
+
+    // Initial render
+    updatePreviews();
+  </script>
+</body>
+</html>
